@@ -121,7 +121,6 @@
     }
 
     .kicker,
-    .chapter,
     .slide-count {
       color: var(--muted);
       font-family: var(--mono);
@@ -768,10 +767,6 @@
         padding-bottom: 4.5rem;
       }
 
-      .chapter {
-        display: none;
-      }
-
       .agent-grid,
       .topic-grid,
       .need-grid,
@@ -916,12 +911,9 @@
       color: #ffffff;
     }
 
-    .slide:first-child .chapter,
     .slide:first-child .lead,
     .slide:first-child .slide-count,
-    .slide.dark-slide .chapter,
     .slide.dark-slide .slide-count,
-    .slide:last-child .chapter,
     .slide:last-child .lead,
     .slide:last-child .slide-count {
       color: rgba(255, 255, 255, 0.72);
@@ -1044,13 +1036,6 @@
 
     .kicker::before {
       display: none;
-    }
-
-    .chapter {
-      color: var(--dim);
-      font-family: var(--body);
-      font-weight: 600;
-      text-transform: none;
     }
 
     h1,
@@ -2029,7 +2014,6 @@
     <section class="slide active" data-section="Opening" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">Shared AI-assisted development</span>
-        <span class="chapter">Team setup</span>
       </header>
       <div class="slide-body split">
         <div>
@@ -2052,7 +2036,6 @@
     <section class="slide" data-section="Opening" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">Where we started</span>
-        <span class="chapter">Version 0.1</span>
       </header>
       <div class="slide-body">
         <h2>We started small: <span class="accent">one custom agent.</span></h2>
@@ -2076,7 +2059,6 @@
     <section class="slide problem" data-section="Problem 1" data-accent="coral">
       <header class="slide-header">
         <span class="kicker">Lesson 01 · Context</span>
-        <span class="chapter">1 / 5 lessons</span>
       </header>
       <div class="slide-body">
         <h2>The prompt is only <span class="accent">part of the task.</span></h2>
@@ -2100,7 +2082,6 @@
     <section class="slide solution" data-section="Solution 1" data-accent="mint">
       <header class="slide-header">
         <span class="kicker">Connection 01 · Azure DevOps MCP</span>
-        <span class="chapter">Configuration + permissions</span>
       </header>
       <div class="slide-body">
         <h2>Let the agent read <span class="accent">Azure DevOps.</span></h2>
@@ -2136,7 +2117,6 @@
     <section class="slide solution" data-section="MCP" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">MCP servers</span>
-        <span class="chapter">Tools beyond the workspace</span>
       </header>
       <div class="slide-body">
         <h2>One protocol. <span class="accent">Many capabilities.</span></h2>
@@ -2145,7 +2125,7 @@
           <article class="server-card tone-green"><span class="server-icon">PW</span><h3>Playwright</h3><p>Open the application, exercise flows and verify the UI in a real browser.</p></article>
           <article class="server-card tone-yellow"><span class="server-icon">AG</span><h3>AG Grid</h3><p>Version-aware documentation and examples for our frontend use case.</p></article>
         </div>
-        <p class="server-more">And many more: public servers, internal tools and future team integrations can use the same model.</p>
+        <p class="server-more">Many more MCP servers already exist. For our internal tools, we should find suitable servers or build our own so agents can connect to them too.</p>
       </div>
       <footer class="slide-footer">
         <span class="funny-footer">Yes, there is probably an MCP server for that.</span>
@@ -2153,14 +2133,13 @@
       </footer>
       <aside class="speaker-notes">
         <p>MCP is not only about Azure DevOps. We currently configure Azure DevOps, Playwright and AG Grid because they solve concrete problems for our team.</p>
-        <p>The important part is the pattern: agents can use approved external tools through one protocol, and we can add internal integrations later without redesigning every agent.</p>
+        <p>The important part is the pattern: agents can use approved tools through one protocol. We should explore existing MCP servers for our internal tools and build dedicated servers where none exist.</p>
       </aside>
     </section>
 
     <section class="slide problem" data-section="Problem 2" data-accent="coral">
       <header class="slide-header">
         <span class="kicker">Lesson 02 · Project context</span>
-        <span class="chapter">2 / 5 lessons</span>
       </header>
       <div class="slide-body">
         <h2>The agent kept <span class="accent">rediscovering the workspace.</span></h2>
@@ -2187,7 +2166,6 @@
     <section class="slide solution" data-section="Solution 2" data-accent="mint">
       <header class="slide-header">
         <span class="kicker">Project map · config.json</span>
-        <span class="chapter">One source of project metadata</span>
       </header>
       <div class="slide-body">
         <h2>Put project knowledge in <span class="accent">configuration.</span></h2>
@@ -2226,7 +2204,6 @@
     <section class="slide problem" data-section="Sharing" data-accent="coral">
       <header class="slide-header">
         <span class="kicker">The team problem</span>
-        <span class="chapter">Useful locally is not shared</span>
       </header>
       <div class="slide-body">
         <h2>How does the setup work for <span class="accent">everyone?</span></h2>
@@ -2250,7 +2227,6 @@
     <section class="slide solution" data-section="Sharing" data-accent="mint">
       <header class="slide-header">
         <span class="kicker">Shared DevTools repository</span>
-        <span class="chapter">Clone once · update together</span>
       </header>
       <div class="slide-body">
         <h2>Make the setup a <span class="accent">team repository.</span></h2>
@@ -2280,7 +2256,6 @@
     <section class="slide problem" data-section="Problem 3" data-accent="coral">
       <header class="slide-header">
         <span class="kicker">Lesson 03 · Conventions</span>
-        <span class="chapter">3 / 5 lessons</span>
       </header>
       <div class="slide-body">
         <h2>The codebase has rules <span class="accent">the agent cannot see.</span></h2>
@@ -2302,7 +2277,6 @@
     <section class="slide solution" data-section="Solution 3" data-accent="mint">
       <header class="slide-header">
         <span class="kicker">Instructions · Rules as context</span>
-        <span class="chapter">Shared + backend + frontend</span>
       </header>
       <div class="slide-body">
         <h2>Write down what <span class="accent">“good” means here.</span></h2>
@@ -2325,7 +2299,6 @@
     <section class="slide problem" data-section="Problem 4" data-accent="coral">
       <header class="slide-header">
         <span class="kicker">Lesson 04 · Responsibility</span>
-        <span class="chapter">4 / 5 lessons</span>
       </header>
       <div class="slide-body">
         <h2>One agent for everything is <span class="accent">good at nothing.</span></h2>
@@ -2347,7 +2320,6 @@
     <section class="slide solution" data-section="Solution 4" data-accent="mint">
       <header class="slide-header">
         <span class="kicker">Four specialized agents</span>
-        <span class="chapter">Tools and rights fit the job</span>
       </header>
       <div class="slide-body">
         <h2>Four jobs. <span class="accent">Four permission sets.</span></h2>
@@ -2371,7 +2343,6 @@
     <section class="slide problem" data-section="Problem 5" data-accent="coral">
       <header class="slide-header">
         <span class="kicker">Lesson 05 · Continuity</span>
-        <span class="chapter">5 / 5 lessons</span>
       </header>
       <div class="slide-body">
         <h2>Research trapped in chat is <span class="accent">temporary.</span></h2>
@@ -2395,7 +2366,6 @@
     <section class="slide solution dark-slide" data-section="Artifact" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">Implement PBI · Artifact</span>
-        <span class="chapter">The contract before code</span>
       </header>
       <div class="slide-body">
         <h2>Save the research. <span class="accent">Stop at approval.</span></h2>
@@ -2424,7 +2394,6 @@
     <section class="slide demo" data-section="Setup" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">The complete setup</span>
-        <span class="chapter">One workspace · shared capabilities</span>
       </header>
       <div class="slide-body">
         <h2>What the agent sees from <span class="accent">C:\git.</span></h2>
@@ -2454,7 +2423,6 @@
     <section class="slide demo" data-section="Demo 1" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">Demo 01 · PBI to plan</span>
-        <span class="chapter">Implement PBI</span>
       </header>
       <div class="slide-body demo-layout">
         <div>
@@ -2484,7 +2452,6 @@
     <section class="slide demo" data-section="Demo 2" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">Demo 02 · PR to finding</span>
-        <span class="chapter">PR Review</span>
       </header>
       <div class="slide-body demo-layout">
         <div>
@@ -2514,7 +2481,6 @@
     <section class="slide demo" data-section="Review output" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">Example response</span>
-        <span class="chapter">A fixed review structure</span>
       </header>
       <div class="slide-body">
         <h2>The answer is designed for <span class="accent">a review decision.</span></h2>
@@ -2559,7 +2525,6 @@
     <section class="slide" data-section="Reality check" data-accent="coral">
       <header class="slide-header">
         <span class="kicker">Where it still breaks</span>
-        <span class="chapter">The setup does not fix the input</span>
       </header>
       <div class="slide-body">
         <h2>What the workflow <span class="accent">does not solve.</span></h2>
@@ -2583,7 +2548,6 @@
     <section class="slide future" data-section="Future" data-accent="yellow">
       <header class="slide-header">
         <span class="kicker">Where we want to go</span>
-        <span class="chapter">Human decisions · AI execution</span>
       </header>
       <div class="slide-body">
         <h2>The workflow we are <span class="accent">aiming for.</span></h2>
@@ -2613,7 +2577,6 @@
     <section class="slide future" data-section="Wishlist" data-accent="yellow">
       <header class="slide-header">
         <span class="kicker">Wishlist</span>
-        <span class="chapter">What would make this easier</span>
       </header>
       <div class="slide-body">
         <h2>What has to improve <span class="accent">next.</span></h2>
@@ -2639,7 +2602,6 @@
     <section class="slide future" data-section="Closing" data-accent="cyan">
       <header class="slide-header">
         <span class="kicker">Closing</span>
-        <span class="chapter">The model is only one part</span>
       </header>
       <div class="slide-body">
         <h2>AI is already good.<br><span class="accent">Our setup is not there yet.</span></h2>
