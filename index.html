@@ -1575,6 +1575,24 @@
       font-size: 1.05rem;
     }
 
+    .server-examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .server-example {
+      padding: 0.38rem 0.62rem;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #ffffff;
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(0, 13, 110, 0.04);
+    }
+
     .git-tree {
       padding: 1.4rem 1.6rem;
       border-radius: 8px;
@@ -2143,6 +2161,17 @@
           <article class="server-card tone-green"><span class="server-icon">PW</span><h3>Playwright</h3><p>Open the application, exercise flows and verify the UI in a real browser.</p></article>
           <article class="server-card tone-yellow"><span class="server-icon">AG</span><h3>AG Grid</h3><p>Version-aware documentation and examples for our frontend use case.</p></article>
         </div>
+        <div class="server-examples" aria-label="Other available MCP servers">
+          <span class="server-example">GitHub</span>
+          <span class="server-example">Chrome DevTools</span>
+          <span class="server-example">Azure</span>
+          <span class="server-example">Figma</span>
+          <span class="server-example">Microsoft Learn</span>
+          <span class="server-example">NuGet</span>
+          <span class="server-example">Atlassian / Jira</span>
+          <span class="server-example">Postman</span>
+          <span class="server-example">Aspire</span>
+        </div>
         <p class="server-more">Many more MCP servers already exist. For our internal tools, we should find suitable servers or build our own so agents can connect to them too.</p>
       </div>
       <footer class="slide-footer">
@@ -2150,7 +2179,7 @@
         <span class="slide-count"></span>
       </footer>
       <aside class="speaker-notes">
-        <p>MCP is not only about Azure DevOps. We currently configure Azure DevOps, Playwright and AG Grid because they solve concrete problems for our team.</p>
+        <p>MCP is not only about Azure DevOps. We currently configure Azure DevOps, Playwright and AG Grid because they solve concrete problems for our team. Other available servers include GitHub, Chrome DevTools, Azure, Figma, Microsoft Learn, NuGet, Atlassian and Postman.</p>
         <p>The important part is the pattern: agents can use approved tools through one protocol. We should explore existing MCP servers for our internal tools and build dedicated servers where none exist.</p>
       </aside>
     </section>
