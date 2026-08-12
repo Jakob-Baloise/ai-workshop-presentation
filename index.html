@@ -1481,27 +1481,42 @@
       position: relative;
       min-height: 21rem;
       padding: 1.5rem;
-      border: 2px dashed #aeb9c6;
-      background: #f7f9fb;
+      border: 1px solid var(--line);
+      background: #ffffff;
     }
 
-    .permission-placeholder {
+    .mcp-capabilities h3 {
+      margin-bottom: 1rem;
+    }
+
+    .capability-list {
       display: grid;
-      height: 100%;
-      place-content: center;
-      gap: 0.75rem;
-      color: var(--dim);
-      text-align: center;
+      gap: 0.7rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
 
-    .permission-placeholder strong {
+    .capability-list li {
+      position: relative;
+      padding: 0.7rem 0.8rem 0.7rem 2.2rem;
+      border-radius: 6px;
+      background: #f3f6fa;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .capability-list li::before {
+      content: "✓";
+      position: absolute;
+      top: 0.7rem;
+      left: 0.8rem;
+      color: var(--mint);
+      font-weight: 800;
+    }
+
+    .capability-list strong {
       color: var(--ink);
-      font-size: 1.15rem;
-    }
-
-    .permission-placeholder span {
-      font-family: var(--mono);
-      font-size: 0.8rem;
     }
 
     .server-grid {
@@ -2098,19 +2113,22 @@
   }
 }</pre>
           </div>
-          <div class="permission-card" aria-label="Placeholder for VS Code permissions screenshot">
-            <div class="permission-placeholder">
-              <span>SCREENSHOT PLACEHOLDER</span>
-              <strong>VS Code · Manage Tool Approval</strong>
-              <span>Show read tools trusted<br>writes always reviewable</span>
-            </div>
+          <div class="permission-card mcp-capabilities" aria-label="Azure DevOps MCP capabilities">
+            <h3>What does the MCP allow the agent to do?</h3>
+            <ul class="capability-list">
+              <li><strong>Read, create and edit work items</strong>, discussions and relations</li>
+              <li><strong>Create and inspect pull requests</strong>, diffs, comments and linked work</li>
+              <li><strong>Search repositories</strong>, branches, commits, files and code</li>
+              <li><strong>Inspect delivery</strong> through builds, test runs and pipelines</li>
+              <li><strong>Access more Azure DevOps services</strong> through the same MCP connection</li>
+            </ul>
           </div>
         </div>
       </div>
       <div class="lesson"><span><strong>What changed</strong> Agents read external context quickly while permissions keep writes controlled. No more context relay race.</span><span class="slide-count"></span></div>
       <aside class="speaker-notes">
         <p>We connect Azure DevOps through Microsoft’s MCP server. The agent can fetch work items, relations, discussions, repositories and PR information with the user’s existing access.</p>
-        <p>Tool permissions remain explicit. Read operations can be trusted; write operations stay reviewable. Replace the placeholder with a screenshot from Chat: Manage Tool Approval before presenting.</p>
+        <p>The Azure DevOps MCP server supports both reading and writing across work items, repositories, pull requests and delivery services. Existing Azure DevOps permissions and the agent's approval rules still control which actions are allowed.</p>
       </aside>
     </section>
 
