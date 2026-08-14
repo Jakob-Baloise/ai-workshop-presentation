@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>How Our Team Works with Coding Agents</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/presentation.css">
+  <link rel="stylesheet" href="styles/overview.css">
+</head>
+<body class="management-deck">
+  <div class="progress" aria-hidden="true"><div class="progress-bar"></div></div>
+
+  <template id="brand-logo-template">
+    <span class="brand-logo brand-wordmark" aria-label="Baloise">baloise</span>
+  </template>
+
+  <main class="deck" aria-live="polite">
+    <section class="slide title-slide active" data-section="Opening" data-chapter="Start" data-accent="cyan">
+      <header class="slide-header"><span class="kicker">Baloise Belgium · Development team</span></header>
+      <div class="slide-body split">
+        <div>
+          <div class="brand-mark"></div>
+          <h1>How our team works<br><span class="accent">with coding agents.</span></h1>
+          <p class="lead">What we built, how we use it, where we want to go and what is currently in the way.</p>
+          <div class="title-command">a practical overview of our current setup</div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Team setup and next steps</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes">
+        <p>This presentation is about how our team works today. It is not a general presentation about AI.</p>
+        <p>We will show the shared setup, a simple PBI example, the direction we want to take and the blockers that need wider support.</p>
+      </aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>What we will show</h3><p>What a coding agent means for our team, how DevTools supplies its shared setup, how improvements spread and how a PBI becomes reviewed code.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>What is already real</h3><p><strong>Fact:</strong> The repository, four agents, shared rules, project mappings and MCP configuration shown in this deck already exist.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>Questions this overview should answer</h3><ul><li>What makes an agent different from a generic coding chat?</li><li>Where does the shared team context come from?</li><li>Which decisions remain with the developer?</li><li>What prevents wider reuse today?</li></ul></section>
+      </aside>
+    </section>
+
+    <section class="slide" data-section="What is an agent?" data-chapter="Our setup" data-accent="cyan">
+      <header class="slide-header"><span class="kicker">First, the idea</span></header>
+      <div class="slide-body">
+        <h2>A coding agent is an assistant <span class="accent">prepared for a specific job.</span></h2>
+        <div class="agent-equation" aria-label="The parts that make a repeatable coding agent workflow">
+          <article><span>Coding assistant</span><strong>Works with code and language</strong></article>
+          <i aria-hidden="true">+</i>
+          <article><span>A specific job</span><strong>“Implement this PBI”</strong></article>
+          <i aria-hidden="true">+</i>
+          <article><span>Team context</span><strong>Rules · project information · approved tools</strong></article>
+          <i aria-hidden="true">+</i>
+          <article><span>Developer checkpoints</span><strong>Approve the plan · review the result</strong></article>
+        </div>
+        <div class="agent-result"><span aria-hidden="true">=</span><div><small>The result</small><strong>A repeatable agent workflow</strong></div></div>
+      </div>
+      <footer class="slide-footer"><span>The assistant provides capability; the setup gives it purpose and boundaries.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>A coding agent is not a separate AI model. It is a coding assistant prepared for a particular type of work.</p><p>The job, team context and developer checkpoints make its behavior more repeatable. For example, our implementation agent researches a PBI, proposes a plan and waits for approval before changing product code.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>One assistant, different jobs</h3><p>The same coding assistant can run an implementation agent or a PR review agent. Each receives different instructions, tools and checkpoints for that job.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>The developer remains responsible</h3><p>The agent can research, propose and implement, but it does not supply missing business decisions. The developer approves the plan and reviews the final code.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>Why define a workflow?</h3><p>A repeatable workflow makes expected steps visible and lets the team improve the setup instead of recreating prompts for every task.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>A useful test for any agent</h3><p>Before sharing an agent, the team should be able to answer four questions:</p><ul><li>What specific job does it perform?</li><li>Which project and team context does it need?</li><li>Which tools may it use?</li><li>Where must a developer review or approve its work?</li></ul></section>
+      </aside>
+    </section>
+
+    <section class="slide" data-section="How we set it up" data-chapter="Our setup" data-accent="mint">
+      <header class="slide-header"><span class="kicker">Then, the practical setup</span></header>
+      <div class="slide-body">
+        <h2>DevTools provides the shared setup <span class="accent">behind our agents.</span></h2>
+        <div class="agent-setup" aria-label="How DevTools, VS Code, project repositories and approved connections work together">
+          <article class="setup-source">
+            <span>Shared through Git</span>
+            <h3>DevTools repository</h3>
+            <ul><li>Agent workflows</li><li>Team instructions</li><li>Project configuration</li></ul>
+          </article>
+          <div class="setup-connector"><span>loaded into</span><i aria-hidden="true">↓</i></div>
+          <article class="setup-workspace">
+            <span>Developer workspace</span>
+            <h3>VS Code combines the request with the shared setup</h3>
+            <p>The developer selects an agent and stays in control of its decisions and changes.</p>
+          </article>
+          <div class="setup-destinations">
+            <article><span>Works with our code</span><h3>Product repositories</h3><p>Reads and changes source code, uses nearby tests and runs the configured quality checks.</p></article>
+            <article><span>Uses connected tools</span><h3>MCP connections</h3><p>Reads work items, checks technical documentation and verifies the user interface in the browser.</p></article>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Git shares the setup; existing systems keep their own permissions.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>This is how we implement the previous definition. DevTools stores the agent workflows, instructions and project configuration as normal files in Git.</p><p>VS Code loads that setup. The agent works in the correct product repository and uses MCP for approved connections such as Azure DevOps. Credentials and permissions remain with the developer and the connected system.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>Starting an implementation task</h3><p>The developer selects Implement PBI and provides a work-item ID. The setup resolves the correct repository, branch, rules and validation commands before the agent researches the task.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>Configuration is not access</h3><p>DevTools can define an MCP connection, but it does not contain credentials or bypass permissions. Developers authenticate with their own account and source systems remain authoritative.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>What exists today</h3><p><strong>Fact:</strong> DevTools currently contains four focused agents, shared frontend and backend instructions, project mappings, quality gates and MCP configuration.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>What lives where?</h3><ul><li><strong>DevTools:</strong> agent workflows, team instructions and project configuration.</li><li><strong>VS Code:</strong> the developer's request and the running agent session.</li><li><strong>Product repository:</strong> source code, tests and project documentation.</li><li><strong>MCP connections:</strong> approved tools for Azure DevOps, documentation and browser verification.</li></ul></section>
+      </aside>
+    </section>
+
+    <section class="slide" data-section="Sharing improvements" data-chapter="Our setup" data-accent="mint">
+      <header class="slide-header"><span class="kicker">Why the repository matters</span></header>
+      <div class="slide-body">
+        <h2>One improvement can reach <span class="accent">the whole team.</span></h2>
+        <div class="sharing-flow">
+          <article class="info-card"><span>01</span><h3>A developer finds a gap</h3><p>An agent misses a project rule or repeats an unnecessary step.</p></article>
+          <i aria-hidden="true">→</i>
+          <article class="info-card"><span>02</span><h3>The shared setup is improved</h3><p>The agent, instruction or project configuration is updated.</p></article>
+          <i aria-hidden="true">→</i>
+          <article class="info-card"><span>03</span><h3>The team reviews the change</h3><p>Other team members check the shared change before it is accepted.</p></article>
+          <i aria-hidden="true">→</i>
+          <article class="info-card"><span>04</span><h3>The team pulls the update</h3><p>Everyone receives the same improvement without recreating it.</p></article>
+        </div>
+        <div class="callout-banner callout-yellow"><strong>Personal first, shared when useful</strong><span>A developer can keep personal agents or instructions, then propose them to the team when others can benefit.</span></div>
+      </div>
+      <footer class="slide-footer"><span>Share the useful parts without forcing every team into one process.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>This is the main reason for using a repository. Prompt knowledge becomes a visible team change that can be reviewed, improved and distributed.</p><p>The shared setup should be a foundation, not a restriction.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>A small example</h3><p>If the frontend build command changes, we update the project quality gates once. The implementation agent then uses the corrected command for every developer working on that project.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>What should stay local?</h3><p>Project-specific behavior belongs with that project or in scoped instructions. Only patterns that are genuinely useful to others should move into the shared foundation.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>Ownership question</h3><p><strong>Question:</strong> Who reviews and maintains shared agents and instructions when they are used across multiple teams?</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>When should an improvement be shared?</h3><ul><li>The same friction appears in more than one task.</li><li>The change is stable enough for another developer to use.</li><li>Its scope is clear: shared, team-specific or project-specific.</li><li>Another team member can review the behavior before distribution.</li></ul></section>
+      </aside>
+    </section>
+
+    <section class="slide" data-section="How we work" data-chapter="Workflow" data-accent="cyan">
+      <header class="slide-header"><span class="kicker">The workflow from request to review</span></header>
+      <div class="slide-body">
+        <h2>The agent does the legwork. <span class="accent">The developer decides.</span></h2>
+        <div class="role-flow">
+          <article class="info-card"><span>01 · Work item</span><h3>Start with the request</h3><dl><dt>Developer</dt><dd>Selects the PBI or task.</dd><dt>Agent</dt><dd>Opens the correct work item and repository.</dd></dl></article>
+          <article class="info-card"><span>02 · Research</span><h3>Gather the context</h3><dl><dt>Agent</dt><dd>Reads requirements, code, rules and tests.</dd><dt>Developer</dt><dd>Answers business questions.</dd></dl></article>
+          <article class="info-card human-step"><span>03 · Plan</span><h3>Review before editing</h3><dl><dt>Agent</dt><dd>Writes facts, assumptions and a plan.</dd><dt>Developer</dt><dd>Corrects and approves the plan.</dd></dl></article>
+          <article class="info-card"><span>04 · Implement</span><h3>Build the approved solution</h3><dl><dt>Agent</dt><dd>Writes the code and tests from the agreed plan.</dd><dt>Developer</dt><dd>Guides changes when new questions appear.</dd></dl></article>
+          <article class="info-card"><span>05 · Review</span><h3>Review the result together</h3><dl><dt>Agent</dt><dd>Runs checks and reviews the diff for issues.</dd><dt>Developer</dt><dd>Reviews the code and makes the final decision.</dd></dl></article>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Approval happens before product code is changed.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>The workflow is not fully automatic. The most important step is the plan review before implementation.</p><p>The final review is also shared: the agent provides checks and findings, while the developer remains responsible for accepting and delivering the change.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>What the developer types</h3><p>The developer selects Implement PBI and supplies a work-item ID and project. The agent opens the correct sources and begins its research.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>Two clear human points</h3><p>The developer answers missing business questions and approves the implementation plan. The developer also reviews the final change before commit, push or PR creation.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>What we can inspect</h3><p>The work document records the sources used, assumptions made, files planned, checks required and final results. Git shows the actual code changes.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>Where the workflow deliberately pauses</h3><ul><li>After research, when requirements are missing or contradictory.</li><li>Before implementation, while the developer reviews the proposed plan.</li><li>After validation, while the developer reviews the diff and test results.</li></ul><p>These pauses are part of the workflow, not failures of automation.</p></section>
+      </aside>
+    </section>
+
+    <section class="slide example-slide" data-section="Example: a clear PBI" data-chapter="Example" data-accent="coral">
+      <header class="slide-header"><span class="kicker">Simple example · Why the request matters</span></header>
+      <div class="slide-body">
+        <h2>A clear PBI means <span class="accent">less guessing.</span></h2>
+        <div class="pbi-comparison">
+          <article class="pbi-unclear">
+            <span>Unclear PBI</span>
+            <h3>“Add an export button.”</h3>
+            <p>The agent must guess what is exported, which format to use, what filters apply and what happens when there is no data.</p>
+          </article>
+          <article class="pbi-clear">
+            <span>Clear PBI</span>
+            <h3>Export the filtered invoice list</h3>
+            <ul>
+              <li>Download a CSV when the user selects Export.</li>
+              <li>Include the currently filtered rows and visible columns.</li>
+              <li>Use the column names shown in the table.</li>
+              <li>Disable Export when there are no matching rows.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>The agent can research the code, but it should not invent the business behavior.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>This fictional example keeps the point simple. Better requirements let the agent find the relevant code, propose useful tests and create a focused plan.</p><p>With the unclear version, the agent should stop and ask questions rather than choose the behavior itself.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>What becomes easier</h3><p>The agent can identify the table state, CSV generation, button state and focused tests without first asking what “export” is supposed to mean.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>When the PBI is unclear</h3><p>The agent should list the missing decisions and stop. The product owner or developer supplies the business answer before implementation continues.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>The practical lesson</h3><p>Agents make unclear requirements visible quickly. They do not remove the need for clear acceptance criteria.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>Questions hidden by “Add an export button”</h3><ul><li>Which records and columns are included?</li><li>Which file format and filename are expected?</li><li>Do the current filters and sort order apply?</li><li>What happens when no rows match?</li><li>Which permissions or data restrictions apply?</li></ul></section>
+      </aside>
+    </section>
+
+    <section class="slide example-slide" data-section="The artifact" data-chapter="Example" data-accent="mint">
+      <header class="slide-header"><span class="kicker">The work document created by the agent</span></header>
+      <div class="slide-body">
+        <h2>The artifact keeps <span class="accent">the work understandable.</span></h2>
+        <div class="artifact-document">
+          <header><span>Work item 12345</span><strong>Export filtered invoices</strong></header>
+          <div class="artifact-sections">
+            <section><h3>Confirmed</h3><p>Export current filtered rows as CSV using visible column names.</p></section>
+            <section><h3>Questions</h3><p>Filename format and date formatting still need confirmation.</p></section>
+            <section><h3>Agreed plan</h3><p>Add export service, connect the button and cover filtered and empty states.</p></section>
+            <section><h3>Checks</h3><p>Focused tests, lint, full test suite and production build.</p></section>
+          </div>
+        </div>
+        <div class="callout-banner callout-mint"><strong>Why keep it?</strong><span>The developer can review the reasoning, another person can continue later, and final results are recorded in one predictable place.</span></div>
+      </div>
+      <footer class="slide-footer"><span>The artifact is working memory, not extra project documentation.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>The artifact is a short local work document. It keeps the agent’s research and the developer’s decisions outside temporary chat history.</p><p>It is updated during the task: first with research and questions, then with the agreed plan, changed files and exact validation results.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>How it changes during the task</h3><p>Research adds facts and questions. Developer answers become decisions. Implementation adds touched files. Validation adds the exact commands and outcomes.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>What it is not</h3><p>It is not the permanent source of business requirements and does not replace the PBI, code review or PR description. Those systems remain authoritative.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>When it is useful</h3><p>Use it for work that needs research, decisions or continuation across sessions. A tiny one-step change does not need a large artifact.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>What a useful artifact records</h3><ul><li>Confirmed facts and the sources used.</li><li>Open questions, assumptions and developer decisions.</li><li>The agreed implementation plan and expected files.</li><li>The exact checks that ran and their outcomes.</li></ul><p>Durable outcomes still belong in the work item or pull request when they need to be shared beyond the task.</p></section>
+      </aside>
+    </section>
+
+    <section class="slide" data-section="End goal" data-chapter="Direction" data-accent="yellow">
+      <header class="slide-header"><span class="kicker">Where we want to end up</span></header>
+      <div class="slide-body">
+        <h2>Share the basics. <span class="accent">Keep room to adapt.</span></h2>
+        <div class="goal-layers">
+          <article class="goal-shared"><span>Shared across teams</span><h3>A supported base setup</h3><p>Approved connections, setup guides, common engineering rules and reusable starter agents.</p></article>
+          <article class="goal-team"><span>Chosen by each team</span><h3>Team workflows</h3><p>Project mappings, quality checks and agents for the work that team performs regularly.</p></article>
+          <article class="goal-personal"><span>Chosen by each developer</span><h3>Personal helpers</h3><p>Private agents and instructions that can stay personal or be proposed back when useful.</p></article>
+        </div>
+        <div class="callout-banner callout-yellow"><strong>The result</strong><span>Teams do not rebuild the basics, but they are not forced into one identical way of working.</span></div>
+      </div>
+      <footer class="slide-footer"><span>Reuse should be easy; sharing should be a choice.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>The end goal has three levels. A small supported foundation is shared across teams. Each team adds its own workflows. Developers can still keep personal helpers.</p><p>Useful personal or team additions can be reviewed and moved into the shared layer later.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>One example at each level</h3><p>Approved Azure DevOps access is shared. Beheerstool quality gates belong to the team setup. A developer’s experimental refactoring agent can stay personal until the team wants it.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>Keep the shared layer small</h3><p>Only stable, broadly useful setup belongs in the shared foundation. Product rules stay with their product, and experiments remain local until reviewed.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>What we want to enable</h3><p>A new team can start without recreating setup, then adapt it without waiting for a central group to design every workflow.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>How to decide the right level</h3><ul><li><strong>Shared:</strong> stable setup that is useful across teams.</li><li><strong>Team:</strong> workflows and checks tied to that team's delivery work.</li><li><strong>Personal:</strong> experiments and helpers that have not yet earned wider adoption.</li></ul><p>Useful additions can move outward after they are understood and reviewed.</p></section>
+      </aside>
+    </section>
+
+    <section class="slide" data-section="Blockers" data-chapter="Direction" data-accent="coral">
+      <header class="slide-header"><span class="kicker">What is currently in the way</span></header>
+      <div class="slide-body">
+        <h2>The approach works. <span class="accent">The setup is still fragmented.</span></h2>
+        <div class="blocker-grid">
+          <article class="info-card"><span>Tool readiness</span><h3>Claude setup is not mature</h3><p>Authentication, VPN, MCP setup and IDE integration are not reliable enough for our workflows.</p></article>
+          <article class="info-card"><span>Tool differences</span><h3>Capabilities are inconsistent</h3><p>Agents, instructions and connections do not work the same way across Copilot, Claude and different IDEs.</p></article>
+          <article class="info-card"><span>Shared foundation</span><h3>Teams still start separately</h3><p>There is no supported cross-team package of agents, instructions, rules and guides to reuse.</p></article>
+          <article class="info-card"><span>Distribution</span><h3>Setup is still manual</h3><p>Developers must configure agent locations, instructions and MCP servers themselves.</p></article>
+          <article class="info-card"><span>Security</span><h3>Approved connections are unclear</h3><p>We need a clear list of allowed MCP connections and a route to approve new ones.</p></article>
+          <article class="info-card"><span>Internal access</span><h3>Important systems are disconnected</h3><p>Tools such as Valumation need a usable API or approved MCP connection.</p></article>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Some blockers cannot be solved by one development team.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>These are practical blockers we experience today. Tools behave differently, installing the shared setup still requires manual configuration, and access to approved or internal systems is unclear.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>What developers experience</h3><p>A workflow can work in one tool but fail in another because authentication, VPN behavior, available models or MCP support differ. Teams then spend time rebuilding setup rather than improving the workflow.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>Security question to resolve</h3><p>We need to know which MCP servers, source systems and data types are approved. A new connection should follow a clear review process instead of an informal team decision.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>Support needed</h3><p>Define the MCP approval route, improve distribution of the base setup and identify who can provide supported access to internal systems such as Valumation.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>What the team can and cannot solve alone</h3><ul><li><strong>Team-owned:</strong> improve agent workflows, instructions and project mappings.</li><li><strong>Shared support:</strong> simplify installation and distribution across workstations.</li><li><strong>Organization-owned:</strong> approve connections and provide supported access to internal systems.</li><li><strong>Vendor-dependent:</strong> close capability differences between tools and IDEs.</li></ul></section>
+      </aside>
+    </section>
+
+    <section class="slide optional-slide" data-section="MCP connections" data-chapter="Direction" data-accent="coral" data-optional="true">
+      <header class="slide-header"><span class="kicker">Optional detail · Connected tools</span></header>
+      <div class="slide-body">
+        <h2>MCP connects the agent to a system. <span class="accent">The system still controls access.</span></h2>
+        <div class="explanation-grid">
+          <article class="explanation-card"><span class="explanation-label">In normal language</span><h3>A defined way to ask a system</h3><p>The agent uses a named tool to retrieve or update information instead of relying on manual copy and paste.</p></article>
+          <article class="explanation-card technical"><span class="explanation-label">Technical term · MCP</span><h3>Model Context Protocol</h3><p>A standard interface exposes named tools to the AI client. The connected system still controls identity, permissions and available operations.</p></article>
+        </div>
+        <div class="approval-route"><span>01 · Connection requested</span><i>→</i><span>02 · Security and owner review</span><i>→</i><span>03 · Approved configuration</span><i>→</i><span>04 · Available to teams</span></div>
+      </div>
+      <footer class="slide-footer"><span>Approve the connection and its operations before making it available to teams.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>MCP provides a standard way for the agent to call tools. It does not replace authentication, authorization or owner approval.</p><p>The connected system still decides what the developer may access, while the organization decides which connection may be offered to teams.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>Current examples</h3><p>DevTools currently configures Azure DevOps, Playwright browser automation and AG Grid documentation. Access still depends on the developer’s environment and credentials.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>What approval should cover</h3><p>Server ownership, authentication, operations exposed, data handled, logging, maintenance and how access can be withdrawn.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>Questions for every proposed connection</h3><ul><li>Who owns and maintains the MCP server?</li><li>Which operations and data does it expose?</li><li>How is the developer authenticated and authorized?</li><li>What is logged, and how can access be removed?</li><li>Who approves changes to the connection?</li></ul></section>
+      </aside>
+    </section>
+
+    <section class="slide" data-section="What we learned" data-chapter="Next steps" data-accent="mint">
+      <header class="slide-header"><span class="kicker">Practical lessons so far</span></header>
+      <div class="slide-body">
+        <h2>What has worked <span class="accent">for our team.</span></h2>
+        <div class="lessons-grid">
+          <article class="info-card"><span>01</span><h3>Start with one task</h3><p>A clear workflow is easier to improve than a general assistant.</p></article>
+          <article class="info-card"><span>02</span><h3>Give each agent a clear job</h3><p>Implementation and review need different behavior and permissions.</p></article>
+          <article class="info-card"><span>03</span><h3>Plan before changing code</h3><p>Missing requirements are cheaper to solve before implementation.</p></article>
+          <article class="info-card"><span>04</span><h3>Keep developer decisions visible</h3><p>Approval and final review should never be implied.</p></article>
+          <article class="info-card"><span>05</span><h3>Use normal engineering checks</h3><p>Generated code still needs tests, linting, builds and review.</p></article>
+          <article class="info-card"><span>06</span><h3>Improve the shared setup</h3><p>Fix the reusable workflow instead of teaching the same lesson repeatedly.</p></article>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>The useful knowledge belongs in the workflow, not in personal prompt history.</span><span class="slide-count"></span></footer>
+      <aside class="speaker-notes"><p>These are working lessons, not universal rules. They come from building and refining the current agents.</p><p>The final lesson is the most important for scaling: repeated friction should result in a shared improvement.</p></aside>
+      <aside class="slide-context">
+        <section data-context="practice" data-label="In practice"><h3>How we improve an agent</h3><p>When a workflow fails or asks unnecessary questions, we identify whether the cause belongs in the agent, a shared rule, project configuration or documentation, then change the narrowest shared file.</p></section>
+        <section data-context="controls" data-label="Controls and limits"><h3>What we avoid</h3><p>Large agents with every tool, hidden business assumptions, automatic writes without a clear gate and claims that a change passed checks that were not actually run.</p></section>
+        <section data-context="evidence" data-label="Decision or evidence"><h3>What to test next</h3><p>Whether these lessons remain useful when another team adopts the setup without help from the people who created it.</p></section>
+        <section data-context="discussion" data-label="Discussion"><h3>A useful next experiment</h3><ul><li>Give one other team the base setup and a small number of agents.</li><li>Observe which setup steps still need direct help.</li><li>Record which improvements they can reuse and which remain team-specific.</li><li>Check whether developers understand the approval points without extra explanation.</li></ul></section>
+      </aside>
+    </section>
+
+  </main>
+
+  <nav class="chapter-rail" aria-label="Presentation chapters"></nav>
+
+  <nav class="controls" aria-label="Presentation controls">
+    <button class="control-button" type="button" data-action="overview" title="Overview (Esc)" aria-label="Toggle slide overview">▦</button>
+    <button class="control-button context-control" type="button" data-action="context" title="Presenter context (C)" aria-label="Toggle presenter context">C</button>
+    <button class="control-button deep-dive-control" type="button" data-action="deep-dive" title="Open optional deep dive (D)" aria-label="Open optional deep dive">D</button>
+    <button class="control-button" type="button" data-action="previous" title="Previous core slide (Left arrow)" aria-label="Previous slide">←</button>
+    <button class="control-button" type="button" data-action="next" title="Next core slide (Right arrow or Space)" aria-label="Next slide">→</button>
+  </nav>
+
+  <aside class="context-panel" aria-hidden="true" aria-label="Presenter context">
+    <button class="control-button panel-close" type="button" data-action="context" title="Close presenter context (C)" aria-label="Close presenter context">×</button>
+    <span class="panel-eyebrow">Presenter context</span>
+    <h2 class="context-title">Slide context</h2>
+    <div class="context-tabs" role="tablist" aria-label="Presenter context topics"></div>
+    <div class="context-content"></div>
+  </aside>
+
+  <script src="scripts/presentation.js"></script>
+</body>
+</html>

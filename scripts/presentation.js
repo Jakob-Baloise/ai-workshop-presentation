@@ -5,11 +5,17 @@ class PresentationDeck {
     this.progressBar = root.querySelector('.progress-bar');
     this.notesPanel = root.querySelector('.notes-panel');
     this.notesContent = root.querySelector('.notes-content');
+    this.contextPanel = root.querySelector('.context-panel');
+    this.contextTitle = root.querySelector('.context-title');
+    this.contextTabs = root.querySelector('.context-tabs');
+    this.contextContent = root.querySelector('.context-content');
+    this.deepDiveButton = root.querySelector('[data-action="deep-dive"]');
     this.chapterRail = root.querySelector('.chapter-rail');
     this.railItems = [];
     this.logoTemplate = root.querySelector('#brand-logo-template');
     this.currentIndex = 0;
     this.touchStartX = 0;
+    this.optionalMode = false;
   }
 
   start() {
@@ -88,17 +94,25 @@ class PresentationDeck {
       document.activeElement.blur();
     }
 
+    const usesOptionalSlides = this.coreSlides.length !== this.slides.length;
     this.slides.forEach((slide, slideIndex) => {
       const isActive = slideIndex === this.currentIndex;
       slide.classList.toggle('active', isActive);
       slide.setAttribute('aria-hidden', String(!isActive));
-      slide.querySelector('.slide-count').textContent = `${String(slideIndex + 1).padStart(2, '0')} / ${this.slides.length}`;
+      const coreIndex = this.slides.slice(0, slideIndex + 1).filter(candidate => candidate.dataset.optional !== 'true').length;
+      const detailMarker = slide.dataset.optional === 'true' ? 'D' : '';
+      const currentNumber = usesOptionalSlides ? `${String(coreIndex).padStart(2, '0')}${detailMarker}` : String(slideIndex + 1).padStart(2, '0');
+      const total = usesOptionalSlides ? this.coreSlides.length : this.slides.length;
+      slide.querySelector('.slide-count').textContent = `${currentNumber} / ${total}`;
     });
 
     const currentSlide = this.slides[this.currentIndex];
+    currentSlide.scrollTop = 0;
     const notes = currentSlide.querySelector('.speaker-notes');
-    this.notesContent.innerHTML = notes ? notes.innerHTML : '<p>No speaker notes for this slide.</p>';
-    this.progressBar.style.height = `${((this.currentIndex + 1) / this.slides.length) * 100}%`;
+    if (this.notesContent) this.notesContent.innerHTML = notes ? notes.innerHTML : '<p>No speaker notes for this slide.</p>';
+    this.updateContext(currentSlide);
+    this.updateDeepDive(currentSlide);
+    this.progressBar.style.height = `${((this.corePosition(currentSlide) + 1) / this.coreSlides.length) * 100}%`;
     this.progressBar.style.background = 'var(--slide-accent)';
     document.body.style.setProperty('--slide-accent', getComputedStyle(currentSlide).getPropertyValue('--slide-accent'));
     document.body.classList.toggle('title-view', currentSlide.matches('.title-slide, .dark-slide, .closing-slide'));
@@ -115,17 +129,151 @@ class PresentationDeck {
       }
     });
 
-    document.title = `${this.currentIndex + 1}/${this.slides.length} · ${currentSlide.dataset.section}`;
+    document.title = `${currentSlide.querySelector('.slide-count').textContent.replaceAll(' ', '')} · ${currentSlide.dataset.section}`;
     if (updateHash) history.replaceState(null, '', `#/${this.currentIndex + 1}`);
   }
 
   move(offset) {
-    if (!document.body.classList.contains('overview')) this.render(this.currentIndex + offset);
+    if (document.body.classList.contains('overview')) return;
+
+    let targetIndex = this.currentIndex + offset;
+    if (!this.optionalMode) {
+      while (this.slides[targetIndex]?.dataset.optional === 'true') targetIndex += offset;
+    }
+
+    const targetSlide = this.slides[targetIndex];
+    if (!targetSlide) return;
+    if (targetSlide.dataset.optional !== 'true') this.optionalMode = false;
+    this.render(targetIndex);
   }
 
   toggleNotes() {
+    if (!this.notesPanel) {
+      this.openTalkTrack();
+      return;
+    }
+    this.closeContext();
     const isOpen = this.notesPanel.classList.toggle('open');
     this.notesPanel.setAttribute('aria-hidden', String(!isOpen));
+  }
+
+  openTalkTrack() {
+    if (!this.contextPanel) return;
+    this.closeNotes();
+    this.contextPanel.classList.add('open');
+    this.contextPanel.setAttribute('aria-hidden', 'false');
+    const talkTab = this.contextTabs?.querySelector('[data-context-key="talk"]');
+    if (talkTab) this.selectContextTab(talkTab.dataset.contextTarget);
+  }
+
+  toggleContext() {
+    if (!this.contextPanel) return;
+    this.closeNotes();
+    const isOpen = this.contextPanel.classList.toggle('open');
+    this.contextPanel.setAttribute('aria-hidden', String(!isOpen));
+  }
+
+  closeNotes() {
+    if (this.notesPanel?.contains(document.activeElement)) {
+      this.root.querySelector('.controls [data-action="notes"]')?.focus();
+    }
+    this.notesPanel?.classList.remove('open');
+    this.notesPanel?.setAttribute('aria-hidden', 'true');
+  }
+
+  closeContext() {
+    if (this.contextPanel?.contains(document.activeElement)) {
+      this.root.querySelector('.controls [data-action="context"]')?.focus();
+    }
+    this.contextPanel?.classList.remove('open');
+    this.contextPanel?.setAttribute('aria-hidden', 'true');
+  }
+
+  updateContext(slide) {
+    if (!this.contextPanel || !this.contextTabs || !this.contextContent) return;
+
+    const sections = [];
+    const speakerNotes = slide.querySelector('.speaker-notes');
+    if (speakerNotes?.textContent.trim()) {
+      const talkTrack = document.createElement('section');
+      talkTrack.dataset.context = 'talk';
+      talkTrack.dataset.label = 'Talk track';
+      talkTrack.innerHTML = `<h3>How to present this slide</h3>${speakerNotes.innerHTML}`;
+      sections.push(talkTrack);
+    }
+    sections.push(...slide.querySelectorAll('.slide-context [data-context]'));
+    const hasContext = sections.length > 0;
+    const contextButton = this.root.querySelector('[data-action="context"]');
+    if (contextButton) {
+      contextButton.disabled = !hasContext;
+      contextButton.setAttribute('aria-disabled', String(!hasContext));
+    }
+    this.contextTitle.textContent = slide.dataset.section || 'Slide context';
+    this.contextTabs.replaceChildren();
+    this.contextContent.replaceChildren();
+
+    if (!hasContext) {
+      this.contextContent.innerHTML = '<p>No additional context for this slide.</p>';
+      return;
+    }
+
+    sections.forEach((section, index) => {
+      const id = `${slide.dataset.section || 'slide'}-${section.dataset.context}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'context-tab';
+      button.dataset.action = 'context-tab';
+      button.dataset.contextTarget = id;
+      button.dataset.contextKey = section.dataset.context;
+      button.textContent = section.dataset.label || section.querySelector('h3')?.textContent || section.dataset.context;
+      button.id = `${id}-tab`;
+      button.setAttribute('role', 'tab');
+      button.setAttribute('aria-controls', id);
+      button.setAttribute('aria-selected', String(index === 0));
+
+      const panel = document.createElement('section');
+      panel.id = id;
+      panel.className = 'context-section';
+      panel.classList.toggle('talk-track', section.dataset.context === 'talk');
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', button.id);
+      panel.hidden = index !== 0;
+      panel.innerHTML = section.innerHTML;
+      this.contextTabs.appendChild(button);
+      this.contextContent.appendChild(panel);
+    });
+  }
+
+  selectContextTab(targetId) {
+    this.contextTabs?.querySelectorAll('.context-tab').forEach(tab => {
+      tab.setAttribute('aria-selected', String(tab.dataset.contextTarget === targetId));
+    });
+    this.contextContent?.querySelectorAll('.context-section').forEach(section => {
+      section.hidden = section.id !== targetId;
+    });
+  }
+
+  updateDeepDive(slide) {
+    if (!this.deepDiveButton) return;
+    const hasDeepDive = this.slides[this.currentIndex + 1]?.dataset.optional === 'true' && slide.dataset.optional !== 'true';
+    this.deepDiveButton.hidden = !hasDeepDive;
+    this.deepDiveButton.disabled = !hasDeepDive;
+  }
+
+  enterDeepDive() {
+    if (this.slides[this.currentIndex + 1]?.dataset.optional !== 'true') return;
+    this.optionalMode = true;
+    this.render(this.currentIndex + 1);
+  }
+
+  get coreSlides() {
+    return this.slides.filter(slide => slide.dataset.optional !== 'true');
+  }
+
+  corePosition(slide) {
+    if (slide.dataset.optional !== 'true') return this.coreSlides.indexOf(slide);
+    const previousCore = this.slides.slice(0, this.currentIndex).reverse().find(candidate => candidate.dataset.optional !== 'true');
+    return Math.max(0, this.coreSlides.indexOf(previousCore));
   }
 
   toggleOverview(forceClose = false) {
@@ -146,8 +294,14 @@ class PresentationDeck {
       this.render(this.slides.length - 1);
     } else if (event.key.toLowerCase() === 'n') {
       this.toggleNotes();
+    } else if (event.key.toLowerCase() === 'c') {
+      this.toggleContext();
+    } else if (event.key.toLowerCase() === 'd') {
+      this.enterDeepDive();
     } else if (event.key === 'Escape') {
-      this.toggleOverview();
+      if (this.notesPanel?.classList.contains('open')) this.closeNotes();
+      else if (this.contextPanel?.classList.contains('open')) this.closeContext();
+      else this.toggleOverview();
     }
   }
 
@@ -158,6 +312,9 @@ class PresentationDeck {
         next: () => this.move(1),
         previous: () => this.move(-1),
         notes: () => this.toggleNotes(),
+        context: () => this.toggleContext(),
+        'context-tab': () => this.selectContextTab(actionButton.dataset.contextTarget),
+        'deep-dive': () => this.enterDeepDive(),
         overview: () => this.toggleOverview(),
         chapter: () => this.render(Number(actionButton.dataset.slideIndex))
       };
