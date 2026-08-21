@@ -4,6 +4,7 @@ A dependency-free presentation about building a shared AI-assisted development w
 
 - `index.html`: full technical workshop deck
 - `overview.html`: shorter management overview of the team's shared setup, workflow, goals, blockers, and next steps
+- `journey.html`: plain-language deck for management and non-technical audiences, telling the past → present → future story (where we started, what we changed, where we're going, questions and ideas)
 
 ## View locally
 

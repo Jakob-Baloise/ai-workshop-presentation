@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Our AI Journey · A Plain-Language Overview</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/presentation.css">
+  <link rel="stylesheet" href="styles/overview.css">
+  <style>
+    /* Slide 2: "before" split with a chat-style window */
+    .before-layout { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2.4rem; align-items: center; }
+    .before-text .callout-banner { margin-top: 1.2rem; }
+    .chat-window {
+      border: 1px solid rgba(0, 13, 110, 0.14); border-radius: 14px; overflow: hidden;
+      background: var(--slide-surface, #fff); box-shadow: 0 18px 40px rgba(0, 13, 110, 0.12);
+    }
+    .chat-window .chat-bar {
+      display: flex; align-items: center; gap: 0.45rem;
+      padding: 0.7rem 0.9rem; background: rgba(0, 13, 110, 0.05);
+      border-bottom: 1px solid rgba(0, 13, 110, 0.08);
+    }
+    .chat-window .chat-bar i { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: rgba(0, 13, 110, 0.18); }
+    .chat-window .chat-bar span { margin-left: 0.4rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.03em; color: rgba(0, 13, 110, 0.5); text-transform: uppercase; }
+    .chat-window .chat-body { padding: 1.1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .chat-msg { padding: 0.7rem 0.95rem; border-radius: 12px; font-size: 1rem; line-height: 1.45; max-width: 90%; }
+    .chat-msg.user { align-self: flex-end; background: var(--slide-accent); color: #05122e; font-weight: 600; border-bottom-right-radius: 4px; }
+    .chat-msg.ai { align-self: flex-start; background: rgba(0, 13, 110, 0.06); color: var(--slide-ink, #0b1533); border-bottom-left-radius: 4px; }
+    .chat-msg .chat-note { display: block; margin-top: 0.4rem; font-size: 0.82rem; font-weight: 500; opacity: 0.65; }
+    @media (max-width: 900px) { .before-layout { grid-template-columns: 1fr; } }
+
+    /* Slide 3: example bullet lists inside cards */
+    .info-card .card-examples { list-style: none; margin: 0.75rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+    .info-card .card-examples li { position: relative; padding-left: 1.1rem; font-size: 0.92rem; line-height: 1.35; color: var(--slide-ink, #0b1533); }
+    .info-card .card-examples li::before { content: ""; position: absolute; left: 0; top: 0.52em; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--slide-accent); }
+
+    /* Slide 7: icon-only badges for systems we could connect */
+    .mcp-icons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .mcp-icons span {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2.3rem; height: 2.3rem; border-radius: 0.65rem;
+      border: 1px solid rgba(0, 13, 110, 0.16); background: var(--slide-surface, #fff);
+    }
+    .mcp-icons svg { width: 1.3rem; height: 1.3rem; color: var(--slide-accent); }
+
+    /* Slide 9: closing call-to-action */
+    .closing-cta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.7rem; }
+    .closing-cta article { padding: 1.1rem 1.2rem; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: var(--slide-radius, 8px); background: rgba(255, 255, 255, 0.04); }
+    .closing-cta strong { display: block; color: var(--slide-accent); font-size: 1.05rem; margin-bottom: 0.35rem; }
+    .closing-cta span { display: block; color: rgba(255, 255, 255, 0.82); font-size: 0.95rem; line-height: 1.45; }
+    .closing-thanks { margin-top: 1.7rem; font-size: 1.15rem; font-weight: 600; opacity: 0.85; }
+    @media (max-width: 900px) { .closing-cta { grid-template-columns: 1fr; } }
+
+    /* Slide 6: interactive concrete example */
+    .example-interactive { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 1.8rem; align-items: stretch; margin-top: 0.4rem; }
+    .demo-steps { display: flex; flex-direction: column; gap: 0.55rem; }
+    .demo-step { display: flex; gap: 0.85rem; align-items: flex-start; width: 100%; text-align: left; padding: 0.8rem 0.95rem; border: 1px solid rgba(0, 13, 110, 0.14); border-left: 4px solid rgba(0, 13, 110, 0.12); border-radius: 10px; background: var(--slide-surface, #fff); cursor: pointer; font: inherit; transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease; }
+    .demo-step:hover { transform: translateX(2px); border-color: rgba(0, 13, 110, 0.28); }
+    .demo-step[aria-current="true"] { border-left-color: var(--slide-accent); box-shadow: 0 6px 18px rgba(0, 13, 110, 0.10); }
+    .demo-step .step-num { font-family: var(--mono, ui-monospace, Menlo, monospace); font-weight: 800; font-size: 0.9rem; color: var(--slide-accent); padding-top: 0.1rem; }
+    .demo-step .step-text { display: block; }
+    .demo-step .step-text strong { display: block; color: var(--slide-ink, #0b1533); font-size: 0.98rem; margin-bottom: 0.15rem; }
+    .demo-step .step-text small { display: block; color: rgba(0, 13, 110, 0.6); font-size: 0.86rem; line-height: 1.35; }
+    .demo-step .human-badge { display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.4rem; border-radius: 999px; background: var(--slide-accent); color: #04122e; font-size: 0.6rem; font-weight: 800; font-style: normal; letter-spacing: 0.05em; text-transform: uppercase; vertical-align: middle; }
+    .demo-hint { margin-top: 0.7rem; font-size: 0.82rem; color: rgba(0, 13, 110, 0.5); }
+    .demo-terminal { display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; background: #0b1533; box-shadow: 0 20px 45px rgba(0, 13, 110, 0.22); min-height: 21rem; }
+    .term-bar { display: flex; align-items: center; gap: 0.45rem; padding: 0.65rem 0.9rem; background: rgba(255, 255, 255, 0.06); border-bottom: 1px solid rgba(255, 255, 255, 0.09); }
+    .term-bar i { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: rgba(255, 255, 255, 0.22); }
+    .term-bar span { margin-left: 0.5rem; font-family: var(--mono, ui-monospace, Menlo, monospace); font-size: 0.76rem; letter-spacing: 0.03em; color: rgba(255, 255, 255, 0.5); }
+    .term-body { flex: 1; padding: 1.1rem 1.2rem; font-family: var(--mono, ui-monospace, Menlo, monospace); font-size: 0.9rem; line-height: 1.65; color: #dfe6f5; overflow: auto; }
+    .term-line { opacity: 0; transform: translateY(4px); transition: opacity .2s ease, transform .2s ease; white-space: pre-wrap; }
+    .term-line.show { opacity: 1; transform: none; }
+    .term-line.is-prompt { color: #79d0ff; }
+    .term-line.is-ok { color: #79e2b4; }
+    .term-line.is-ask { color: #ffd066; }
+    .term-line.is-info { color: #aab8ff; }
+    .term-line.is-add { color: #79e2b4; }
+    .term-line.is-muted { color: rgba(223, 230, 245, 0.5); }
+    .term-line.is-you { color: #ff9f87; font-weight: 600; }
+    .term-cursor { display: inline-block; color: #79d0ff; animation: term-blink 1s steps(1) infinite; }
+    @keyframes term-blink { 50% { opacity: 0; } }
+    @media (max-width: 900px) { .example-interactive { grid-template-columns: 1fr; } }
+
+    /* Notes panel: single page with headers, hide the redundant lone tab */
+    .context-tabs:has(.context-tab:only-child) { display: none; }
+    .context-section h3 { margin-top: 1.15rem; }
+    .context-section h3:first-child { margin-top: 0; }
+  </style>
+</head>
+<body class="management-deck">
+  <div class="progress" aria-hidden="true"><div class="progress-bar"></div></div>
+
+  <template id="brand-logo-template">
+    <span class="brand-logo brand-wordmark" aria-label="Baloise">baloise</span>
+  </template>
+
+  <main class="deck" aria-live="polite">
+
+    <!-- 1 · TITLE -->
+    <section class="slide title-slide active" data-section="Opening" data-chapter="Start" data-accent="cyan">
+      <header class="slide-header"><span class="kicker">Baloise Belgium · Development team</span></header>
+      <div class="slide-body split">
+        <div>
+          <div class="brand-mark"></div>
+          <h1>Our AI journey.<br><span class="accent">A shared way of working.</span></h1>
+          <p class="lead">Where we started, what we changed, and where we want to go.</p>
+          <div class="title-command">a plain look at the story so far</div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Past, present and future</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="notes" data-label="Notes">
+          <h3>What this deck is</h3>
+          <p>The story of how our development team went from using AI on its own, ad hoc, to a shared way of working. It is told in three parts: where we were, how we work now, and where we want to go.</p>
+          <h3>Why it matters</h3>
+          <p>The focus is on outcomes for the team and the business, such as consistency, quality and speed, rather than on tools or technical detail.</p>
+          <h3>What we want from the session</h3>
+          <ul><li>A clear, shared picture of what changed and why.</li><li>Confidence that people stay in control of the work.</li><li>Your ideas on where this could help most next.</li></ul>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 2 · WHERE WE WERE (very short, no cards) -->
+    <section class="slide problem" data-section="Where we were" data-chapter="Where we were" data-accent="coral">
+      <header class="slide-header"><span class="kicker">A short look back</span></header>
+      <div class="slide-body">
+        <h2>We started <span class="accent">scattered.</span></h2>
+        <div class="before-layout">
+          <div class="before-text">
+            <p class="lead">Four developers, four different ways of working. AI was just an isolated chat window with no link to the ticket, the code or our rules, so it mostly guessed. And whatever one person figured out stayed with that person.</p>
+          </div>
+          <div class="chat-window" aria-label="Example of a context-free AI chat">
+            <div class="chat-bar"><i></i><i></i><i></i><span>AI chat</span></div>
+            <div class="chat-body">
+              <div class="chat-msg user">write a test for this function</div>
+              <div class="chat-msg ai">Sure! Here is a test using Jest with a mocked service.<span class="chat-note">Guessing the framework, the setup and what to check.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>Useful, but unpredictable and impossible to build on.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="notes" data-label="Notes">
+          <h3>How it used to work</h3>
+          <p>In the past we used the Visual Studio Copilot chat window to ask questions. Sometimes it had a little context to work with, but most of the time it understood very little about the project. Everyone also worked in their own way, which gave mixed and unpredictable results.</p>
+          <h3>Why that held us back</h3>
+          <p>A chat window only knows what you paste into it. Without the ticket, the code and our standards, it cannot know our naming, our patterns or what "done" means here, so it fills the gaps with guesses. Those guesses then cost time in review and rework.</p>
+          <h3>The bigger problem</h3>
+          <p>Whatever one person figured out stayed with that person. The old way produced useful snippets, but it was personal and unpredictable, so the team could not rely on it or build on it.</p>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 3 · WHAT THE TEAM SHARES -->
+    <section class="slide" data-section="One shared setup" data-chapter="Shared way of working" data-accent="mint">
+      <header class="slide-header"><span class="kicker">One shared way of working</span></header>
+      <div class="slide-body">
+        <h2>Now the team shares <span class="accent">one setup.</span></h2>
+        <div class="blocker-grid">
+          <article class="info-card"><span>Tools and agents</span><h3>Ready-made assistants</h3><p>Shared assistants for the jobs we do often.</p><ul class="card-examples"><li>PBI agent that implements a ticket</li><li>PR review agent that checks a change</li><li>More for other common jobs</li></ul></article>
+          <article class="info-card"><span>Connections</span><h3>Access to our systems</h3><p>Approved connections to the systems we already use.</p><ul class="card-examples"><li>Azure DevOps work items</li><li>Our documentation</li><li>Our own applications</li></ul></article>
+          <article class="info-card"><span>Setup</span><h3>A ready-to-go starting point</h3><p>One agreed setup that simply works, with nothing to configure per person.</p></article>
+          <article class="info-card"><span>Rules</span><h3>Our coding standards</h3><p>Our standards are part of the setup, including the unwritten rules we used to keep in our heads. Writing them down means the assistants, and new joiners, follow them too.</p></article>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>One setup, shared by the whole team.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="agents" data-label="Agents">
+          <h3>The agents we have</h3>
+          <p>Each agent is focused on one job. Today we have, among others:</p>
+          <ul><li><strong>Implement PBI:</strong> takes a ticket from research to reviewed code.</li><li><strong>PR Review:</strong> reviews a pull request or a local change for issues.</li><li><strong>Feature decomposition:</strong> breaks an epic into PBIs and tasks.</li><li><strong>Bruno sync:</strong> keeps our API test collections up to date.</li><li><strong>Explore:</strong> fast, read-only questions about the codebase.</li></ul>
+          <h3>How an agent is built</h3>
+          <p>An agent is a file that describes four things: the job it does, the instructions and rules it must follow, the tools it may use, and where a person must approve or review. They all load the same shared rules, so their behaviour stays consistent.</p>
+        </section>
+        <section data-context="mcp" data-label="MCP">
+          <h3>What is an MCP server?</h3>
+          <p>MCP stands for Model Context Protocol. It is a standard way to plug an AI assistant into another system. Instead of copy-pasting information into a chat, the assistant calls a named tool that talks to the system directly. The system stays in charge: the developer signs in with their own account, and the system decides what they may read or change.</p>
+          <h3>Which servers we use today</h3>
+          <ul><li><strong>Azure DevOps:</strong> read and update work items, discussions, pull requests, branches, commits and pipelines.</li><li><strong>Playwright:</strong> drive a browser to check the running user interface.</li></ul>
+          <h3>Why it is handy</h3>
+          <p>The assistant pulls the real work item, reads the acceptance criteria and checks the actual UI on its own. Far less manual copy-paste, fewer mistakes and much more relevant results.</p>
+        </section>
+        <section data-context="rules" data-label="Rules &amp; documentation">
+          <h3>Our coding standards</h3>
+          <p>The rules are our shared standards for how we build and test: backend, frontend and general conventions. They include the unwritten rules we used to keep in our heads, now written down so the assistants and new joiners follow them too.</p>
+          <h3>Documentation</h3>
+          <p>Alongside the rules, the setup points to our project documentation and references. This is context the assistant reads to follow how we actually do things here. It is reference material, not a live connection.</p>
+        </section>
+        <section data-context="repository" data-label="Repository">
+          <h3>Everything in one repository</h3>
+          <p>The agents, their instructions, the shared rules and the project configuration all live in one version-controlled repository in Azure DevOps, the same way our code does.</p>
+          <h3>Why that matters</h3>
+          <p>Every change is proposed, reviewed and recorded, so the setup is transparent, reversible and shared. Anyone can pull the latest version and get the same, improved setup.</p>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 4 · HOW WE GET BETTER TOGETHER -->
+    <section class="slide" data-section="Getting better together" data-chapter="Shared way of working" data-accent="cyan">
+      <header class="slide-header"><span class="kicker">How improvements spread</span></header>
+      <div class="slide-body">
+        <h2>A good idea from one person <span class="accent">reaches everyone.</span></h2>
+        <div class="sharing-flow">
+          <article class="info-card"><span>01</span><h3>Someone finds a better way</h3><p>A developer discovers a trick or spots something the setup gets wrong.</p></article>
+          <i aria-hidden="true">→</i>
+          <article class="info-card"><span>02</span><h3>It goes into our shared repository</h3><p>The improvement is added to our Azure DevOps repository, in one place.</p></article>
+          <i aria-hidden="true">→</i>
+          <article class="info-card"><span>03</span><h3>The team reviews it</h3><p>Others check the change before it is accepted, so quality stays controlled.</p></article>
+          <i aria-hidden="true">→</i>
+          <article class="info-card"><span>04</span><h3>Everyone gets the update</h3><p>The whole team pulls in the improvement and benefits from it.</p></article>
+        </div>
+        <div class="callout-banner callout-mint"><strong>Why this matters</strong><span>A trick one person discovers becomes something the whole team keeps. We get better together, not one person at a time.</span></div>
+      </div>
+      <footer class="slide-footer"><span>Improvements and tricks are shared, not kept private.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="notes" data-label="Notes">
+          <h3>How improvements spread</h3>
+          <p>Someone finds a better way or spots something the setup gets wrong. The improvement is added to our shared Azure DevOps repository, the team reviews it, and then everyone pulls in the update.</p>
+          <h3>Why a shared repository</h3>
+          <p>The setup lives in a version-controlled repository, just like our code. Every change is proposed, reviewed and recorded, so improvements are transparent, reversible, and available to everyone.</p>
+          <h3>A small example</h3>
+          <p>If a project's build step changes, we update it once in the shared repository. From then on, everyone's setup uses the corrected step. A trick one person discovers becomes something the whole team keeps.</p>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 5 · HOW THE AI WORKS -->
+    <section class="slide" data-section="How the AI works" data-chapter="How the AI works" data-accent="cyan">
+      <header class="slide-header"><span class="kicker">From request to result</span></header>
+      <div class="slide-body">
+        <h2>The AI does the legwork. <span class="accent">People make the decisions.</span></h2>
+        <div class="role-flow">
+          <article class="info-card"><span>01 · Understand</span><h3>Understand the work</h3><dl><dt>Together</dt><dd>We and the AI work through the feature and fill in what is missing.</dd><dt>AI</dt><dd>Reads the feature and points out what is unclear.</dd></dl></article>
+          <article class="info-card"><span>02 · Investigate</span><h3>Gather the facts</h3><dl><dt>AI</dt><dd>Reads our code, checks what already exists and looks at related projects and side information.</dd><dt>People</dt><dd>Add context the AI cannot see.</dd></dl></article>
+          <article class="info-card human-step"><span>03 · Decide</span><h3>People stay in the loop</h3><dl><dt>People</dt><dd>We make the calls the AI cannot. It has no judgment of its own.</dd><dt>AI</dt><dd>Lays out a clear plan to approve.</dd></dl></article>
+          <article class="info-card"><span>04 · Build</span><h3>Write the code</h3><dl><dt>AI</dt><dd>Writes the code from the agreed plan.</dd><dt>People</dt><dd>Steer when new questions come up.</dd></dl></article>
+          <article class="info-card human-step"><span>05 · Approve</span><h3>The final call is human</h3><dl><dt>AI</dt><dd>Runs the checks and flags problems.</dd><dt>People</dt><dd>Review the result. The final approval is always a person.</dd></dl></article>
+        </div>
+        <div class="callout-banner callout-yellow"><strong>The guardrail</strong><span>Nothing reaches our product before a person has approved the plan and reviewed the result.</span></div>
+      </div>
+      <footer class="slide-footer"><span>Two clear human checkpoints: approve the plan, review the result.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="workflow" data-label="The workflow">
+          <h3>The five steps</h3>
+          <p>Understand the work, investigate the facts, decide the plan, build the code, and review the result. The assistant does the legwork; people make the decisions.</p>
+          <h3>The two checkpoints</h3>
+          <ul><li>Before any code is written, a developer approves the plan.</li><li>Before anything is delivered, a developer reviews the result.</li></ul>
+          <h3>Fast, but not wise</h3>
+          <p>The AI is fast at reading, searching and drafting, but it does not understand our business. People decide what is actually right.</p>
+        </section>
+        <section data-context="artifact" data-label="The artifact">
+          <h3>A shared work document</h3>
+          <p>As it works, the agent keeps a short work document, the artifact. It records what it found, the questions it asked, the agreed plan, the files it changed and the checks it ran.</p>
+          <h3>Why it helps</h3>
+          <p>It keeps the reasoning and decisions out of throwaway chat history. A developer can review how a conclusion was reached, and another person can pick the work up later.</p>
+          <h3>What it is not</h3>
+          <p>It is working memory, not project documentation. The real requirements stay in the work item and the final outcome stays in the pull request. Durable decisions are copied there once approved.</p>
+        </section>
+        <section data-context="plan" data-label="Why plan first">
+          <h3>Plan before building</h3>
+          <p>Agreeing a short plan first makes the assistant's intentions visible while they are still cheap to change. Catching a wrong assumption in the plan takes a minute; catching it after the code is written takes far longer.</p>
+          <h3>The most valuable checkpoint</h3>
+          <p>This is the single most useful moment for a person to step in, because a small correction here saves a lot of rework later.</p>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 6 · CONCRETE EXAMPLE (interactive) -->
+    <section class="slide" id="demo-slide" data-section="A concrete example" data-chapter="How the AI works" data-accent="coral">
+      <header class="slide-header"><span class="kicker">A concrete example · click each step</span></header>
+      <div class="slide-body">
+        <h2>From epic to pull request, <span class="accent">step by step.</span></h2>
+        <div class="example-interactive">
+          <div>
+            <div class="demo-steps" role="list">
+              <button class="demo-step" type="button" data-step="0" aria-current="true"><span class="step-num">01</span><span class="step-text"><strong>AI analyses the epic</strong><small>It investigates the requirement, drafts a PBI breakdown and asks where the scope is unclear.</small></span></button>
+              <button class="demo-step" type="button" data-step="1"><span class="step-num">02</span><span class="step-text"><strong>We ask it to implement PBI 4823 <em class="human-badge">you</em></strong><small>It gathers the context itself: the work item, our rules and Azure DevOps.</small></span></button>
+              <button class="demo-step" type="button" data-step="2"><span class="step-num">03</span><span class="step-text"><strong>It proposes a plan</strong><small>A short plan appears and it pauses for anything unclear, before touching code.</small></span></button>
+              <button class="demo-step" type="button" data-step="3"><span class="step-num">04</span><span class="step-text"><strong>It writes the code</strong><small>After approval, it implements the change and its tests from the agreed plan.</small></span></button>
+              <button class="demo-step" type="button" data-step="4"><span class="step-num">05</span><span class="step-text"><strong>We review the code <em class="human-badge">you</em></strong><small>The review flags a possible improvement, and a developer makes the final call. Nothing ships without a person.</small></span></button>
+            </div>
+            <p class="demo-hint">Click a step to watch it happen.</p>
+          </div>
+          <div class="demo-terminal" aria-label="Example agent activity">
+            <div class="term-bar"><i></i><i></i><i></i><span>agent · terminal</span></div>
+            <div class="term-body" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>A made-up feature, but the steps are real.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="how" data-label="How this works">
+          <h3>An interactive walkthrough</h3>
+          <p>This slide replays the workflow on a small, made-up feature. Click each step on the left and the matching agent activity appears in the terminal on the right. It restarts from the first step each time you open the slide.</p>
+          <h3>It is illustrative</h3>
+          <p>The values, such as work item 4823 and the file names, are made up, but the order of steps and the human checkpoints match how the workflow really runs.</p>
+        </section>
+        <section data-context="steps" data-label="What each step does">
+          <h3>Analyse and implement</h3>
+          <p>First the agent analyses the epic: it reads the requirement, drafts a PBI breakdown and asks where the scope is unclear. Then, when we ask it to implement one PBI, it gathers the context itself through Azure DevOps and our rules.</p>
+          <h3>Plan, build and review</h3>
+          <p>It proposes a short plan and pauses for approval. After approval it writes the code and its tests and runs the checks. Finally the review flags a possible improvement, we decide whether to apply it, and a developer gives the final approval before a pull request is opened.</p>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 7 · WHAT IT GIVES US TODAY -->
+    <section class="slide solution" data-section="What it delivers" data-chapter="What it gives us" data-accent="yellow">
+      <header class="slide-header"><span class="kicker">The payoff · what we get today</span></header>
+      <div class="slide-body">
+        <h2>What this gives us <span class="accent">today.</span></h2>
+        <div class="lessons-grid">
+          <article class="info-card"><span>Consistency</span><h3>Same quality, whoever does it</h3><p>Results depend less on who happens to pick up the work.</p></article>
+          <article class="info-card"><span>Quality</span><h3>Our standards still apply</h3><p>Normal reviews, tests and checks stay in place, so the bar does not drop.</p></article>
+          <article class="info-card"><span>Less rework</span><h3>No rebuilding from scratch</h3><p>Nobody re-gathers the same context or reinvents the same prompts.</p></article>
+          <article class="info-card"><span>Onboarding</span><h3>New people start faster</h3><p>They begin from a shared, proven setup instead of a blank page.</p></article>
+          <article class="info-card"><span>Retained knowledge</span><h3>It stays with the team</h3><p>Know-how lives in the shared setup, not only in one person's head.</p></article>
+          <article class="info-card"><span>Focus</span><h3>More time to think</h3><p>With less busywork, we can spend more time understanding the problem, weighing the options and reviewing the result carefully.</p></article>
+        </div>
+      </div>
+      <footer class="slide-footer"><span>These are not promises. They are in use today.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="notes" data-label="Notes">
+          <h3>The outcomes today</h3>
+          <p>Consistency, quality kept high, less repeated work, faster onboarding, knowledge that stays with the team, and more time to think. These are business outcomes, not technical features.</p>
+          <h3>Already real</h3>
+          <p>This shared way of working is in daily use on real work, with our normal reviews, tests and checks applied.</p>
+          <h3>How we would measure it</h3>
+          <ul><li>Less time lost re-gathering context.</li><li>More consistent output across people.</li><li>Shorter ramp-up for new team members.</li></ul>
+          <h3>Good to know</h3>
+          <p>Speed is welcome, but the bigger wins are consistency and quality: the same standard of work regardless of who does it, and more thinking time before code is written.</p>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 7 · WHERE THIS COULD GO (future directions) -->
+    <section class="slide" data-section="Where this could go" data-chapter="Where we're going" data-accent="cyan">
+      <header class="slide-header"><span class="kicker">A look ahead · what we want to improve</span></header>
+      <div class="slide-body">
+        <h2>Where this <span class="accent">could go.</span></h2>
+        <div class="component-grid" style="--columns: 2">
+          <article class="component-card">
+            <h3>Shared toolkits for every team</h3>
+            <p>Other teams start from a ready-made toolkit of assistants, setup and rules, then adapt it to their own work. Nobody starts from a blank page.</p>
+          </article>
+          <article class="component-card">
+            <h3>Connected to more of our systems</h3>
+            <p>Over time the assistants safely reach more of the tools we use every day, so we copy less information by hand.</p>
+            <div class="mcp-icons" aria-label="Examples of systems we could connect">
+              <span title="Azure DevOps" aria-label="Azure DevOps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+              <span title="Confluence" aria-label="Confluence"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h4"/></svg></span>
+              <span title="Jira" aria-label="Jira"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l2.5 2.5L16 9"/></svg></span>
+              <span title="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="8" r="2.5"/><path d="M6 8.5v7"/><path d="M18 10.5c0 3.5-4 2-6 5"/></svg></span>
+              <span title="SharePoint" aria-label="SharePoint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h3.5l2 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+              <span title="Databases" aria-label="Databases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v14c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></span>
+            </div>
+          </article>
+          <article class="component-card">
+            <h3>Smarter, automated quality checks</h3>
+            <p>More of the routine checking, testing and reviewing runs on its own, so people spend their attention on the decisions that matter.</p>
+          </article>
+          <article class="component-card">
+            <h3>A growing library of agents</h3>
+            <p>As we spot new repeatable jobs, we add new assistants for them and share them with the whole team.</p>
+          </article>
+        </div>
+        <div class="callout-banner callout-yellow"><strong>Still taking shape</strong><span>These are directions we are exploring, not finished plans. The list keeps growing as we learn.</span></div>
+      </div>
+      <footer class="slide-footer"><span>Reuse the basics, then keep improving together.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="reuse" data-label="Reuse across teams">
+          <h3>Shared toolkits for every team</h3>
+          <p>A new team could start from a ready-made pack of agents, rules and setup, then adapt it. Concrete examples:</p>
+          <ul><li>A starter pack with the Implement PBI and PR Review agents already configured.</li><li>Backend and frontend rule sets a team can switch on and tweak.</li><li>Project templates that resolve the right repository, branch and checks automatically.</li><li>A short guide so a new joiner is productive on day one.</li></ul>
+        </section>
+        <section data-context="connections" data-label="More connections">
+          <h3>Connecting more systems</h3>
+          <p>Through reviewed MCP connections, the assistants could reach more of what we use daily. Ideas we could explore:</p>
+          <ul><li><strong>Confluence or SharePoint:</strong> read our specs and internal documentation.</li><li><strong>Jira:</strong> for teams that track work there instead of Azure DevOps.</li><li><strong>Test management:</strong> link code changes to test cases and results.</li><li><strong>Monitoring and logs:</strong> help investigate an incident from the real error data.</li><li><strong>Design tools:</strong> read a Figma design when building a screen.</li></ul>
+          <p>Each new connection is reviewed first, and the system keeps control of access.</p>
+        </section>
+        <section data-context="quality" data-label="Smarter quality">
+          <h3>More automated checking</h3>
+          <p>More of the routine checking could run on its own, so people focus on judgement:</p>
+          <ul><li>Automatic test suggestions for changed code.</li><li>A first-pass review on every pull request that flags obvious issues.</li><li>Checks for accessibility, security and performance basics.</li><li>Spotting missing edge cases before a human reviews.</li></ul>
+        </section>
+        <section data-context="library" data-label="A growing library">
+          <h3>More agents over time</h3>
+          <p>As we notice repeatable jobs, we add focused agents and share them. Candidates we have thought about:</p>
+          <ul><li>A test-writing agent for existing untested code.</li><li>A documentation agent that keeps READMEs and API notes current.</li><li>A dependency-update agent that proposes and tests upgrades.</li><li>A release-notes agent that summarises what changed.</li></ul>
+        </section>
+        <section data-context="measure" data-label="How we would measure">
+          <h3>Knowing it is worth it</h3>
+          <p>To invest well, we would watch a few simple signals:</p>
+          <ul><li>Time saved per task, especially on context gathering.</li><li>How consistent the output is across people.</li><li>How quickly new joiners become productive.</li><li>Fewer issues found late, in review or after release.</li></ul>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 8 · STILL NEW, MOVING FAST -->
+    <section class="slide problem" data-section="Still new" data-chapter="Where we're going" data-accent="coral">
+      <header class="slide-header"><span class="kicker">An honest note</span></header>
+      <div class="slide-body">
+        <h2>This is still new, <span class="accent">and moving fast.</span></h2>
+        <div class="blocker-grid">
+          <article class="info-card"><span>Moving target</span><h3>It changes every month</h3><p>The tools and what they can do keep shifting. What was true last month may already be different today.</p></article>
+          <article class="info-card"><span>A real skill</span><h3>Learning it takes time</h3><p>Using AI well is a skill. It takes practice to know when to trust it and when to step in.</p></article>
+          <article class="info-card"><span>Never finished</span><h3>We keep adapting</h3><p>Our shared setup is not fixed. We keep refining it as the tools and our needs change.</p></article>
+        </div>
+        <div class="callout-banner callout-mint"><strong>What this means</strong><span>Getting value from AI is an ongoing investment, not a one-time switch. The time we put in now is what makes it pay off later.</span></div>
+      </div>
+      <footer class="slide-footer"><span>New, fast-moving, and worth the effort.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="reality" data-label="The reality">
+          <h3>Still new, moving fast</h3>
+          <p>Working with AI changes almost every month. Using it well is a skill that takes practice, and our shared setup is never truly finished.</p>
+          <h3>An ongoing investment</h3>
+          <p>Getting value from AI is an investment, not a one-time switch. The teams that learn it now will be ahead as the tools mature.</p>
+        </section>
+        <section data-context="try" data-label="Things we could try">
+          <h3>Not experimented with yet</h3>
+          <p>Recent capabilities we have not really used ourselves:</p>
+          <ul><li><strong>Background agents:</strong> hand a ticket to an agent that works on its own and comes back with a pull request to review.</li><li><strong>Parallel agents:</strong> several agents working on different tickets at the same time.</li><li><strong>Spec-driven development:</strong> write a clear specification and let the agent implement against it.</li><li><strong>Plain-language interfaces:</strong> ask for a change in words, away from the editor.</li><li><strong>Bulk test generation</strong> across a whole area of the codebase at once.</li><li><strong>Self-updating documentation</strong> that follows the code.</li></ul>
+        </section>
+        <section data-context="industry" data-label="What the industry is building">
+          <h3>Where the field is heading</h3>
+          <ul><li><strong>Autonomous coding agents</strong> that take a whole issue end to end, such as GitHub's Copilot coding agent, Claude Code, Cursor and Devin.</li><li><strong>Agents that use a computer</strong> like a person, clicking through a browser or app to finish a task.</li><li><strong>Much larger memory,</strong> so an agent can hold a whole project in context at once.</li><li><strong>Teams of specialised agents</strong> that plan, build, test and review together.</li><li><strong>A growing catalogue of MCP connections</strong> to plug into almost any tool.</li><li><strong>Private, on-device models</strong> for sensitive code that cannot leave the company.</li></ul>
+          <p>Not all of this is ready or right for us yet, but it shows where things are going.</p>
+        </section>
+        <section data-context="help" data-label="What helps most">
+          <h3>What helps us keep up</h3>
+          <p>Time and support to keep learning and refining, so the investment compounds instead of stalling. A little room to experiment safely is what turns fast-moving tools into real value.</p>
+        </section>
+      </aside>
+    </section>
+
+    <!-- 9 · QUESTIONS & IDEAS -->
+    <section class="slide closing-slide" data-section="Questions &amp; Ideas" data-chapter="Questions &amp; Ideas" data-accent="cyan">
+      <header class="slide-header"><span class="kicker">Let's talk</span></header>
+      <div class="slide-body">
+        <h2>From scattered to shared. <span class="accent">Let's keep going.</span></h2>
+        <p class="lead">Four people working alone became one team with a shared, human-controlled way of working. It is in daily use, and it gets a little better every month.</p>
+        <div class="closing-cta">
+          <article><strong>Questions</strong><span>About how it works, or where the limits are.</span></article>
+          <article><strong>Ideas</strong><span>Where a shared way of working could help your area.</span></article>
+          <article><strong>Next step</strong><span>Which direction we take forward first.</span></article>
+        </div>
+        <p class="closing-thanks">Thank you. Over to you.</p>
+      </div>
+      <footer class="slide-footer"><span>From scattered to shared, and still improving.</span><span class="slide-count"></span></footer>
+      <aside class="slide-context">
+        <section data-context="notes" data-label="Notes">
+          <h3>The whole story, briefly</h3>
+          <p>We moved from four people working alone to one shared, human-controlled way of working, and we are still improving it every month.</p>
+          <h3>Prompts for the room</h3>
+          <ul><li>What surprised you most about how this works?</li><li>Where do you see the biggest opportunity, or the biggest risk?</li><li>What would you need to feel confident scaling it further?</li></ul>
+        </section>
+      </aside>
+    </section>
+
+  </main>
+
+  <nav class="chapter-rail" aria-label="Presentation chapters"></nav>
+
+  <nav class="controls" aria-label="Presentation controls">
+    <button class="control-button" type="button" data-action="overview" title="Overview (Esc)" aria-label="Toggle slide overview">▦</button>
+    <button class="control-button context-control" type="button" data-action="context" title="Notes (N)" aria-label="Toggle notes">N</button>
+    <button class="control-button deep-dive-control" type="button" data-action="deep-dive" title="Open optional deep dive (D)" aria-label="Open optional deep dive">D</button>
+    <button class="control-button" type="button" data-action="previous" title="Previous slide (Left arrow)" aria-label="Previous slide">←</button>
+    <button class="control-button" type="button" data-action="next" title="Next slide (Right arrow or Space)" aria-label="Next slide">→</button>
+  </nav>
+
+  <aside class="context-panel" aria-hidden="true" aria-label="Notes">
+    <button class="control-button panel-close" type="button" data-action="context" title="Close notes (N)" aria-label="Close notes">×</button>
+    <span class="panel-eyebrow">Notes</span>
+    <h2 class="context-title">Slide context</h2>
+    <div class="context-tabs" role="tablist" aria-label="Context topics"></div>
+    <div class="context-content"></div>
+  </aside>
+
+  <script src="scripts/presentation.js"></script>
+  <script>
+    // Interactive concrete-example slide: click a step to animate the mock terminal.
+    (function () {
+      const slide = document.getElementById('demo-slide');
+      if (!slide) return;
+      const stepEls = [...slide.querySelectorAll('.demo-step')];
+      const body = slide.querySelector('.term-body');
+      const scripted = [
+        [
+          ['prompt', '> analyse epic 4821  "Customer export"'],
+          ['ok', '\u2713 read epic, acceptance criteria and links'],
+          ['ok', '\u2713 scanned related code and past PBIs'],
+          ['info', '\u25c6 suggested PBIs:'],
+          ['info', '   1. Export button on invoice list'],
+          ['info', '   2. CSV generation service'],
+          ['info', '   3. Empty-state handling'],
+          ['ask', '? which formats besides CSV are in scope?']
+        ],
+        [
+          ['prompt', '> implement PBI 4823'],
+          ['ok', '\u2713 Azure DevOps MCP: loaded work item 4823'],
+          ['ok', '\u2713 read acceptance criteria and discussion'],
+          ['ok', '\u2713 applied team rules (backend + frontend)'],
+          ['ok', '\u2713 resolved project, branch and quality gates']
+        ],
+        [
+          ['info', '\u25c6 plan:'],
+          ['info', '   1. Add ExportService (CSV)'],
+          ['info', '   2. Wire Export button + disabled state'],
+          ['info', '   3. Tests: filtered list and empty list'],
+          ['ask', '? filename: invoices-YYYYMMDD.csv ?'],
+          ['muted', '\u2026 waiting for your approval']
+        ],
+        [
+          ['you', 'you: approved'],
+          ['prompt', '> implementing the agreed plan'],
+          ['add', '+ ExportService.cs        CSV generation'],
+          ['add', '+ InvoiceList.tsx         Export button + disabled state'],
+          ['add', '+ ExportService.Tests.cs  filtered + empty cases'],
+          ['ok', '\u2713 lint clean'],
+          ['ok', '\u2713 dotnet test  24 passed'],
+          ['ok', '\u2713 npm run build  ok']
+        ],
+        [
+          ['prompt', '> review'],
+          ['info', '\u0394 3 files changed, 128 +, 4 -'],
+          ['ok', '\u2713 all checks passed'],
+          ['ask', '! suggestion: stream large exports to keep memory low'],
+          ['you', 'you: good idea, apply it'],
+          ['add', '~ ExportService.cs  now streams rows'],
+          ['ok', '\u2713 re-checked  all green'],
+          ['you', 'you: approve and open pull request']
+        ]
+      ];
+      let timers = [];
+      const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+      function play(idx) {
+        clearTimers();
+        stepEls.forEach((el, i) => el.setAttribute('aria-current', String(i === idx)));
+        body.textContent = '';
+        const lines = scripted[idx];
+        lines.forEach((ln, i) => {
+          const div = document.createElement('div');
+          div.className = 'term-line is-' + ln[0];
+          div.textContent = ln[1];
+          body.appendChild(div);
+          timers.push(setTimeout(() => {
+            div.classList.add('show');
+            body.scrollTop = body.scrollHeight;
+          }, 150 * i + 90));
+        });
+        timers.push(setTimeout(() => {
+          const cur = document.createElement('div');
+          cur.className = 'term-line show';
+          cur.innerHTML = '<span class="term-cursor">\u258b</span>';
+          body.appendChild(cur);
+        }, 150 * lines.length + 120));
+      }
+      stepEls.forEach((el, i) => el.addEventListener('click', () => play(i)));
+      new MutationObserver(() => {
+        if (slide.classList.contains('active')) play(0);
+      }).observe(slide, { attributes: true, attributeFilter: ['class'] });
+      if (slide.classList.contains('active')) play(0);
+    })();
+  </script>
+</body>
+</html>
